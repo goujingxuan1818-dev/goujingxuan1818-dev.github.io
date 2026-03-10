@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>前后端对接测试</title>
+    <!-- 引入 Axios 库（必须有，否则请求会失败） -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <!-- 标题 -->
+    <h3>Python 后端 ↔ 前端 对接测试</h3>
+    <!-- 测试按钮 -->
+    <button style="padding: 8px 16px; cursor: pointer;" onclick="getUser()">点击获取后端数据</button>
+    <!-- 显示结果的区域 -->
+    <div id="result" style="margin-top: 20px; font-size: 16px; color: #333;"></div>
+
+    <script>
+        // 后端接口地址（必须和 Flask 服务端口一致）
+        const apiUrl = 'http://127.0.0.1:5000/api/get_user';
+
+        // 点击按钮触发的函数
+        function getUser() {
+            // 1. 先显示加载提示
+            document.getElementById('result').innerText = '正在请求后端数据...';
+            
+            // 2. 发送 GET 请求到 Python 后端
+            axios.get(apiUrl)
+                .then(function (response) {
+                    // 请求成功：显示后端返回的数据
+                    const data = response.data.data;
+                    document.getElementById('result').innerText = 
+                        `✅ 请求成功！\n用户名：${data.name}\n年龄：${data.age}\n城市：${data.city}`;
+                })
+                .catch(function (error) {
+                    // 请求失败：显示错误原因
+                    document.getElementById('result').innerText = 
+                        `❌ 请求失败：${error.message}\n请检查后端服务是否启动`;
+                });
+        }
+    </script>
+</body>
+</html>
